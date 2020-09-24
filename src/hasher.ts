@@ -1,39 +1,14 @@
 import objectSorter = require('./objectSorter');
-import crypto, { HexBase64Latin1Encoding } from 'crypto';
-
-/**
- * Default hash algorithm
- */
-const DEFAULT_ALG = 'sha256';
-/**
- * Default hash string enoding
- */
-const DEFAULT_ENV = 'hex';
+import { sha256 } from 'js-sha256';
 
 namespace hasher {
-  /**
-   * Object hasher options
-   */
-  export interface HasherOptions extends objectSorter.SorterOptions {
-    /**
-     * Hash algorithm to use
-     * @default 'sha256'
-     */
-    alg?: string;
-    /**
-     * String encoding for hash
-     * @default 'hex'
-     */
-    enc?: HexBase64Latin1Encoding;
-  }
-
   export interface Hasher {
     /**
      * Create hash of an object
      * @param object source object
      * @returns hash string of an object
      */
-    hash(object: any, opts?: hasher.HasherOptions): string;
+    hash(object: any): string;
     /**
      * Create sorted string from an object
      * @param object source object
@@ -54,23 +29,13 @@ namespace hasher {
  * Hasher constructor
  * @param options hasher options
  */
-function hasher(
-  options: hasher.HasherOptions = {}
-): hasher.Hasher {
+function hasher(): hasher.Hasher {
+  const sortObject = objectSorter();
 
-  const sortObject = objectSorter(options);
-
-  function hashObject(obj: any, opts: hasher.HasherOptions = {}) {
-    const alg = opts.alg || options.alg || DEFAULT_ALG;
-    const enc = opts.enc || options.enc || DEFAULT_ENV;
+  function hashObject(obj: any) {
     const sorted = sortObject(obj);
-    
-    return crypto
-      .createHash(alg)
-      .update(sorted)
-      .digest(enc);
+    return sha256.hex(sorted)
   }
-
   return {
     hash: hashObject,
     sort: sortObject,

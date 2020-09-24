@@ -27,7 +27,9 @@
       "posttag": "git push --follow-tags origin $npm_package_config_releaseBranch"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "js-sha256": "^0.9.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",

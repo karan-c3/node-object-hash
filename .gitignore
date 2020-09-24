@@ -6,5 +6,4 @@ coverage
 config/local.*
 **/*.xxx.js
 **/*.xxx.ts
-dist
 browser
